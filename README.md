@@ -1,97 +1,115 @@
 # 🍽️ Foodify Backend
 
-The **Foodify Backend** is a RESTful API built using **Node.js** and **Express.js**, serving as the backbone for the Foodify food ordering platform. It handles user authentication, restaurant and menu management, order processing, and **dummy payment integration using Razorpay API**.
+The **Foodify Backend** is built using **Java** and **Spring Boot** to power a seamless food ordering experience for users and restaurant partners. It handles user authentication, restaurant and menu management, order processing, and integrates **Razorpay for dummy payment processing**.
 
 ---
 
 ## 🧾 Overview
 
-This backend application supports:
+This backend supports:
 
-- 🔐 User authentication (JWT-based)
-- 🏪 Restaurant and menu management
-- 🛒 Order creation and tracking
-- 💳 Razorpay payment integration (dummy)
-- 🔧 Scalable and modular MVC architecture
+- 🔐 Secure user registration and login (JWT)
+- 🏪 Restaurant, menu, and order management
+- 💳 Razorpay dummy payment integration
+- 📦 RESTful APIs consumed by the React frontend
+- 🧩 Scalable modular architecture using Spring Boot
 
 ---
 
 ## ⚙️ Tech Stack
 
-- **Runtime**: Node.js
-- **Framework**: Express.js
-- **Database**: MongoDB (via Mongoose)
-- **Authentication**: JWT, bcrypt
-- **Environment Configuration**: dotenv
-- **Payment Gateway**: Razorpay API (dummy)
-- **Request Validation**: express-validator / Joi
-- **Logging**: morgan
-- **Testing**: Postman / Jest (optional)
+- **Backend Language**: Java 17+
+- **Framework**: Spring Boot
+- **Database**: MySQL / PostgreSQL
+- **Security**: Spring Security + JWT
+- **ORM**: Spring Data JPA
+- **Payment Integration**: Razorpay (dummy/test mode)
+- **API Documentation**: Swagger (optional)
+- **Frontend (connected)**: React.js (separate repo)
 
 ---
 
-## 🔧 Environment Variables
+## 🔧 Environment Setup
 
-Create a `.env` file in the root with:
+### 📦 Prerequisites
 
-```env
-PORT=5000
-DB_URI=mongodb://localhost:27017/foodify
-JWT_SECRET=your_jwt_secret
-RAZORPAY_KEY_ID=your_test_key_id
-RAZORPAY_KEY_SECRET=your_test_key_secret
+- Java 17+
+- Maven
+- MySQL/PostgreSQL
+- Postman (for testing APIs)
 
-1.Clone the Repo
+### 🔑 `application.properties` (Example)
+
+```properties
+# Server
+server.port=8080
+
+# Database
+spring.datasource.url=jdbc:mysql://localhost:3306/foodify
+spring.datasource.username=root
+spring.datasource.password=your_password
+
+# JPA
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.show-sql=true
+
+# JWT
+app.jwt.secret=your_jwt_secret
+app.jwt.expirationMs=86400000
+
+# Razorpay (Test Mode)
+razorpay.key=your_test_key
+razorpay.secret=your_test_secret
+🚀 How to Run the Project Locally
+1. Clone the Repo
 git clone https://github.com/ASananda/FoodifyBackend.git
 cd FoodifyBackend
-2. Install Dependencies
-npm install
-3.Start MongoDB
-Make sure MongoDB is running:
-mongod
-4. Start the Backend Server
-npm run dev
-
-🔌 API Endpoints (Quick Overview)
-Auth Routes
+Configure Database
+Create a database named foodify in your MySQL/PostgreSQL instance.
+3. Update application.properties with your DB credentials and Razorpay test keys.
+4. Build and Run
+🔌 API Endpoints (Sample)
+Auth
 Method	Endpoint	Description
-POST	/api/auth/register	Register a new user
-POST	/api/auth/login	Login and get JWT token
+POST	/api/auth/signup	Register a new user
+POST	/api/auth/login	User login & JWT
 
-Restaurant Routes
+Restaurant
 Method	Endpoint	Description
 GET	/api/restaurants	List all restaurants
-POST	/api/restaurants	Add a new restaurant (admin)
-GET	/api/restaurants/:id	Get restaurant with menu
+POST	/api/restaurants	Add a new restaurant
 
-Order Routes
+Orders
 Method	Endpoint	Description
-POST	/api/orders	Create a new order
-GET	/api/orders/:id	Get order status
-GET	/api/orders/user	Get orders for current user
+POST	/api/orders	Place a new order
+GET	/api/orders/user	View user order history
 
-Payment Routes
+Payments (Razorpay)
 Method	Endpoint	Description
-POST	/api/payment/order	Create Razorpay payment order
-POST	/api/payment/verify	Verify payment signature (dummy)
+POST	/api/payment/order	Create a Razorpay payment order
+POST	/api/payment/verify	Verify Razorpay payment signature
 
-💳 Razorpay Payment Flow (Dummy)
-Frontend calls /api/payment/order to create a Razorpay order.
+💳 Razorpay Test Flow
+Frontend hits /api/payment/order to create a payment order.
 
-Razorpay opens checkout using test keys.
+Razorpay checkout is launched on frontend using test keys.
 
-On success, frontend sends response to /api/payment/verify.
+On success, Razorpay sends a payment ID + signature.
 
-Backend verifies signature using Razorpay secret key (dummy for now).
+Backend verifies the payment via /api/payment/verify.
 
-Order marked as Paid.
+Order is marked as paid (in test mode).
 
-🔐 Security
-JWT authentication middleware
+No real money is involved in Razorpay test mode.
 
-bcrypt for password hashing
+🔐 Security Features
+Spring Security for route protection
 
-Input validation via express-validator
+JWT-based stateless authentication
 
-Centralized error handler
+Role-based access control (User/Admin)
 
+Input validation and global exception handling
+
+🧪 Testing
+Use Postman to test all endpoints.
